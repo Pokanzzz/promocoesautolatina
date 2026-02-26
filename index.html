@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PromoStudio · espaço para logo · tom escuro</title>
+    <!-- Fontes e ícones -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #f5f5f7;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Outfit', sans-serif;
+            padding: 20px;
+        }
+
+        .studio-card {
+            max-width: 1400px;
+            width: 100%;
+            background: #ffffff;
+            border-radius: 56px;
+            box-shadow: 0 25px 60px -10px rgba(0, 0, 0, 0.1);
+            padding: 32px 36px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 40px;
+            transition: all 0.2s ease;
+            border: 1px solid rgba(0,0,0,0.03);
+        }
+
+        .control-panel {
+            flex: 1.1;
+            min-width: 380px;
+            background: #f9f9fc;
+            border-radius: 42px;
+            padding: 32px 28px;
+            box-shadow: 0 12px 30px -8px rgba(0, 0, 0, 0.05);
+            border: 1px solid #eaeef5;
+        }
+
+        .control-panel h2 {
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            color: #1e2b3c;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 32px;
+        }
+
+        .control-panel h2 i {
+            background: #1e3b5c;
+            color: white;
+            padding: 14px;
+            border-radius: 30px;
+            font-size: 24px;
+            box-shadow: 0 8px 16px -4px #a0b8d0;
+        }
+
+        .input-group {
+            margin-bottom: 28px;
+        }
+
+        .input-group label {
+            display: block;
+            font-weight: 600;
+            font-size: 15px;
+            color: #2c3e50;
+            margin-bottom: 6px;
+            margin-left: 8px;
+            letter-spacing: -0.2px;
+        }
+
+        .input-group label i {
+            margin-right: 8px;
+            color: #3a5f7a;
+            width: 20px;
+        }
+
+        .field-with-icon {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .field-with-icon i {
+            position: absolute;
+            left: 18px;
+            color: #7f8fa4;
+            font-size: 18px;
+        }
+
+        .field-with-icon input,
+        .field-with-icon textarea {
+            width: 100%;
+            padding: 16px 16px 16px 52px;
+            border: 2px solid #e2e8f0;
+            border-radius: 38px;
+            font-size: 16px;
+            background: #ffffff;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 500;
+            color: #1a2634;
+            transition: 0.2s;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.02);
+        }
+
+        .field-with-icon textarea {
+            resize: vertical;
+            min-height: 90px;
+            border-radius: 32px;
+        }
+
+        .field-with-icon input:focus,
+        .field-with-icon textarea:focus {
+            border-color: #4b7ba0;
+            outline: none;
+            background: #ffffff;
+            box-shadow: 0 12px 22px -10px #a0c0e0;
+        }
+
+        .upload-area {
+            background: #f0f4fa;
+            border: 2px dashed #b8cce0;
+            border-radius: 38px;
+            padding: 20px 24px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            cursor: pointer;
+            transition: 0.15s;
+            margin-top: 8px;
+        }
+
+        .upload-area:hover {
+            background: #e6edf5;
+            border-color: #7a9bc2;
+        }
+
+        .upload-area i {
+            font-size: 40px;
+            color: #3a5f7a;
+        }
+
+        .upload-text {
+            flex: 1;
+        }
+
+        .upload-text .filename {
+            font-weight: 600;
+            color: #1e3b5c;
+            word-break: break-word;
+        }
+
+        .upload-text .hint {
+            font-size: 13px;
+            color: #5f748b;
+            margin-top: 4px;
+        }
+
+        #fileInput {
+            display: none;
+        }
+
+        .image-preview-box {
+            margin: 24px 0 20px;
+            border-radius: 32px;
+            background: #f0f4fa;
+            padding: 18px;
+            text-align: center;
+            border: 1px solid #d8e2f0;
+        }
+
+        .image-preview-box p {
+            font-weight: 500;
+            color: #2c3e50;
+            margin-bottom: 12px;
+            font-size: 15px;
+        }
+
+        .preview-img {
+            max-width: 100%;
+            max-height: 160px;
+            border-radius: 24px;
+            box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.1);
+            border: 3px solid white;
+            object-fit: contain;
+            background: #eef2f6;
+        }
+
+        .btn-generate {
+            background: #1e3b5c;
+            border: none;
+            padding: 22px 20px;
+            width: 100%;
+            border-radius: 60px;
+            color: white;
+            font-size: 26px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            margin-top: 20px;
+            box-shadow: 0 18px 30px -6px #a0b8d0;
+            transition: all 0.15s;
+            border: 1px solid rgba(255,255,255,0.4);
+            cursor: pointer;
+        }
+
+        .btn-generate:hover {
+            background: #2a4f72;
+            transform: scale(1.01);
+            box-shadow: 0 22px 34px -6px #b0c8e0;
+        }
+
+        .btn-generate i {
+            font-size: 32px;
+        }
+
+        .art-preview {
+            flex: 1;
+            min-width: 400px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .art-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 22px;
+            padding: 0 8px;
+        }
+
+        .art-header h3 {
+            font-weight: 700;
+            font-size: 24px;
+            color: #1e2b3c;
+            letter-spacing: -0.4px;
+        }
+
+        .dimension-badge {
+            background: #eef2f6;
+            border-radius: 40px;
+            padding: 8px 24px;
+            font-weight: 600;
+            color: #1e3b5c;
+            border: 1px solid #d0dcec;
+            font-size: 18px;
+        }
+
+        .canvas-container {
+            background: #eef2f6;
+            border-radius: 48px;
+            padding: 22px;
+            box-shadow: 0 25px 45px -12px #a0b8d0;
+            border: 2px solid #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #promoCanvas {
+            width: 100%;
+            height: auto;
+            border-radius: 32px;
+            box-shadow: 0 20px 30px -8px rgba(0,0,0,0.15);
+            background: #1e3b5c;
+            display: block;
+            aspect-ratio: 1080 / 1350;
+            max-width: 540px;
+            margin: 0 auto;
+            border: 4px solid #ffffff;
+        }
+
+        .download-area {
+            margin-top: 28px;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .btn-download {
+            background: #ffffff;
+            border: 1px solid #d0dcec;
+            padding: 16px 36px;
+            border-radius: 60px;
+            font-weight: 700;
+            font-size: 20px;
+            color: #1e3b5c;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.03);
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: 0.15s;
+        }
+
+        .btn-download:hover {
+            background: #f5f9ff;
+            box-shadow: 0 14px 24px -8px #b0c8e0;
+            color: #1e3b5c;
+            border-color: #a0b8d0;
+        }
+
+        .btn-download i {
+            font-size: 24px;
+        }
+
+        footer {
+            font-size: 13px;
+            color: #7f8fa4;
+            margin-top: 18px;
+            text-align: right;
+        }
+
+        @media (max-width: 950px) {
+            .studio-card {
+                padding: 24px;
+            }
+            .control-panel {
+                min-width: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="studio-card">
+        <div class="control-panel">
+            <h2>
+                <i class="fas fa-wand-magic-sparkles"></i> 
+                PromoStudio
+            </h2>
+
+            <div class="input-group">
+                <label><i class="fas fa-cloud-upload-alt"></i> Imagem do produto</label>
+                <div class="upload-area" id="uploadArea">
+                    <i class="fas fa-camera-retro"></i>
+                    <div class="upload-text">
+                        <div class="filename" id="fileNameDisplay">Nenhuma imagem selecionada</div>
+                        <div class="hint">Clique para buscar ou arraste (JPG/PNG)</div>
+                    </div>
+                </div>
+                <input type="file" id="fileInput" accept="image/*">
+                <div class="image-preview-box" id="imagePreviewBox" style="display: none;">
+                    <p><i class="fas fa-image"></i> preview do upload</p>
+                    <img id="imagePreview" class="preview-img" src="#" alt="prévia">
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label><i class="fas fa-qrcode"></i> Código do produto</label>
+                <div class="field-with-icon">
+                    <i class="fas fa-hashtag"></i>
+                    <input type="text" id="codigoInput" placeholder="Ex: 789123" value="AZL789">
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label><i class="fas fa-tag"></i> Nome do produto (use Enter para quebrar)</label>
+                <div class="field-with-icon">
+                    <i class="fas fa-font"></i>
+                    <textarea id="nomeInput" placeholder="Ex: Tênis Ultra Comfort&#10;Edição Especial">Tênis Wave Blue
+Edição Limitada</textarea>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label><i class="fas fa-coins"></i> Preço FINAL (R$)</label>
+                <div class="field-with-icon">
+                    <i class="fas fa-brazilian-real-sign"></i>
+                    <input type="text" id="valorFinalInput" placeholder="129,90" value="249,90">
+                </div>
+            </div>
+
+            <button class="btn-generate" id="gerarBtn">
+                <i class="fas fa-bolt"></i> GERAR OFERTA
+                <i class="fas fa-arrow-right"></i>
+            </button>
+
+            <div style="margin-top: 20px; font-size: 14px; color: #5f748b; padding-left: 12px;">
+                <i class="fas fa-ruler-combined"></i> Você digita o preço final · geramos um original maior
+            </div>
+        </div>
+
+        <div class="art-preview">
+            <div class="art-header">
+                <h3><i class="fas fa-paintbrush" style="margin-right: 10px;"></i>Prévia da oferta</h3>
+                <span class="dimension-badge"><i class="fas fa-expand"></i> 1080 x 1350</span>
+            </div>
+            <div class="canvas-container">
+                <canvas id="promoCanvas" width="1080" height="1350"></canvas>
+            </div>
+            <div class="download-area">
+                <div class="btn-download" id="downloadBtn">
+                    <i class="fas fa-download"></i> BAIXAR ARTE
+                </div>
+            </div>
+            <footer>
+                <i class="fas fa-magic"></i> qualidade full HD · pronto para whatsapp
+            </footer>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            const canvas = document.getElementById('promoCanvas');
+            const ctx = canvas.getContext('2d');
+
+            const fileInput = document.getElementById('fileInput');
+            const uploadArea = document.getElementById('uploadArea');
+            const fileNameSpan = document.getElementById('fileNameDisplay');
+            const imagePreviewBox = document.getElementById('imagePreviewBox');
+            const imagePreview = document.getElementById('imagePreview');
+
+            const codigoInput = document.getElementById('codigoInput');
+            const nomeInput = document.getElementById('nomeInput');
+            const valorFinalInput = document.getElementById('valorFinalInput');
+
+            const gerarBtn = document.getElementById('gerarBtn');
+            const downloadBtn = document.getElementById('downloadBtn');
+
+            let uploadedImage = null;
+            let percentualAtual = 20;
+
+            function gerarDescontoAleatorio() {
+                return Math.floor(Math.random() * (25 - 15 + 1)) + 15;
+            }
+
+            function calcularPrecoOriginal(precoFinal, percentualDesconto) {
+                let finalNumerico = parseFloat(precoFinal.replace(/[R$\s]/g, '').replace(',', '.'));
+                if (isNaN(finalNumerico) || finalNumerico <= 0) return '0,00';
+                let original = finalNumerico / (1 - percentualDesconto / 100);
+                return original.toFixed(2).replace('.', ',');
+            }
+
+            function renderPromo() {
+                const codigo = codigoInput.value.trim() || "---";
+                const nomeCompleto = nomeInput.value.trim() || "Produto";
+                const precoFinalStr = valorFinalInput.value.trim() || "0,00";
+                
+                percentualAtual = gerarDescontoAleatorio();
+                const precoOriginalStr = calcularPrecoOriginal(precoFinalStr, percentualAtual);
+
+                const w = 1080;
+                const h = 1350;
+                canvas.width = w;
+                canvas.height = h;
+
+                // FUNDO AZUL MAIS ESCURO (solicitado)
+                const gradient = ctx.createLinearGradient(0, 0, w*0.7, h*0.8);
+                gradient.addColorStop(0, '#0a1f33');  // escuro
+                gradient.addColorStop(0.3, '#122b40');
+                gradient.addColorStop(0.7, '#1a354d');
+                gradient.addColorStop(1, '#0c2238');
+                ctx.fillStyle = gradient;
+                ctx.fillRect(0, 0, w, h);
+
+                // Espaço reservado para LOGO DA EMPRESA (topo central)
+                ctx.save();
+                ctx.shadowColor = '#000000';
+                ctx.shadowBlur = 15;
+                ctx.shadowOffsetY = 3;
+                ctx.font = 'bold 36px "Outfit", sans-serif';
+                ctx.fillStyle = '#ffffffcc';
+                ctx.textAlign = 'center';
+                ctx.fillText('____________________', 540, 70);  // linha simulando espaço para logo
+                ctx.font = 'bold 22px "Outfit", sans-serif';
+                ctx.fillStyle = '#ffd966';
+                ctx.fillText('ESPAÇO PARA LOGO', 540, 110);
+                ctx.textAlign = 'left';
+                ctx.restore();
+
+                // Elementos decorativos suaves (mais sutis no fundo escuro)
+                ctx.save();
+                ctx.shadowColor = 'rgba(255, 255, 255, 0.08)';
+                ctx.shadowBlur = 70;
+                ctx.fillStyle = '#ffffff08';
+                ctx.beginPath();
+                ctx.arc(200, 350, 400, 0, Math.PI*2);
+                ctx.fill();
+                ctx.fillStyle = '#ffffff10';
+                ctx.beginPath();
+                ctx.arc(950, 1050, 500, 0, Math.PI*2);
+                ctx.fill();
+                ctx.restore();
+
+                // Moldura da imagem (mais escura para combinar)
+                ctx.save();
+                ctx.shadowColor = '#000000';
+                ctx.shadowBlur = 30;
+                ctx.shadowOffsetY = 8;
+                ctx.fillStyle = '#1e3a5a';
+                ctx.beginPath();
+                ctx.roundRect(130, 180, 820, 580, 48);  // movido 40px para baixo (140 -> 180)
+                ctx.fill();
+                ctx.restore();
+
+                ctx.save();
+                ctx.strokeStyle = '#ffffff40';
+                ctx.lineWidth = 14;
+                ctx.beginPath();
+                ctx.roundRect(130, 180, 820, 580, 48);
+                ctx.stroke();
+                ctx.clip();
+
+                if (uploadedImage) {
+                    const imgW = uploadedImage.width;
+                    const imgH = uploadedImage.height;
+                    const rectW = 820;
+                    const rectH = 580;
+                    const rectX = 130;
+                    const rectY = 180;
+
+                    const scale = Math.max(rectW / imgW, rectH / imgH);
+                    const drawW = imgW * scale;
+                    const drawH = imgH * scale;
+                    const drawX = rectX + (rectW - drawW) / 2;
+                    const drawY = rectY + (rectH - drawH) / 2;
+                    ctx.drawImage(uploadedImage, drawX, drawY, drawW, drawH);
+                } else {
+                    ctx.fillStyle = '#1e3a5a';
+                    ctx.fillRect(130, 180, 820, 580);
+                    ctx.font = 'bold 50px "Outfit", sans-serif';
+                    ctx.fillStyle = '#b0c8e0';
+                    ctx.shadowBlur = 0;
+                    ctx.fillText('🖼️ imagem', 420, 490);
+                }
+                ctx.restore();
+
+                // CÓDIGO (agora mais abaixo devido ao espaço da logo)
+                ctx.shadowColor = '#000000';
+                ctx.shadowBlur = 18;
+                ctx.shadowOffsetY = 4;
+                ctx.font = '600 34px "Outfit", monospace';
+                ctx.fillStyle = '#ffffffdd';
+                ctx.fillText(`CÓD. ${codigo}`, 160, 820);  // ajustado (era 780)
+
+                // NOME DO PRODUTO
+                ctx.font = 'bold 60px "Outfit", sans-serif';
+                ctx.fillStyle = '#ffffff';
+                
+                const linhas = nomeCompleto.split('\n');
+                const linhaAltura = 70;
+                let yPos = 920;  // ajustado (era 880)
+                
+                linhas.forEach((linha) => {
+                    if (linha.trim() !== '') {
+                        ctx.fillText(linha, 160, yPos);
+                        yPos += linhaAltura;
+                    }
+                });
+
+                // PREÇO ORIGINAL
+                ctx.save();
+                ctx.font = '500 48px "Outfit", sans-serif';
+                ctx.fillStyle = '#dddddd';
+                ctx.globalAlpha = 0.9;
+                ctx.fillText(`de R$ ${precoOriginalStr}`, 160, 1080);  // ajustado (era 1040)
+                
+                ctx.beginPath();
+                ctx.strokeStyle = '#ff8a8a';
+                ctx.lineWidth = 6;
+                ctx.globalAlpha = 0.9;
+                ctx.moveTo(150, 1065);  // ajustado
+                ctx.lineTo(520, 1065);
+                ctx.stroke();
+                ctx.restore();
+
+                // PREÇO FINAL
+                ctx.font = '800 100px "Outfit", sans-serif';
+                ctx.fillStyle = '#ffffff';
+                ctx.fillText(`R$ ${precoFinalStr}`, 160, 1210);  // ajustado (era 1170)
+
+                // BOLINHA AMARELA (posição ajustada)
+                ctx.save();
+                ctx.shadowColor = '#ffd966';
+                ctx.shadowBlur = 30;
+                ctx.shadowOffsetX = 0;
+                ctx.shadowOffsetY = 0;
+                
+                const gradientCircle = ctx.createRadialGradient(860, 1060, 20, 860, 1060, 140);  // y 1060 (era 1020)
+                gradientCircle.addColorStop(0, '#ffe484');
+                gradientCircle.addColorStop(0.5, '#ffc107');
+                gradientCircle.addColorStop(1, '#f5a623');
+                ctx.beginPath();
+                ctx.arc(860, 1060, 115, 0, Math.PI*2);
+                ctx.fillStyle = gradientCircle;
+                ctx.fill();
+
+                ctx.font = 'bold 70px "Outfit", sans-serif';
+                ctx.fillStyle = '#0f2b50';
+                ctx.shadowBlur = 20;
+                ctx.shadowColor = '#fff9d0';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(`${percentualAtual}%`, 860, 1060);
+                
+                ctx.font = 'bold 36px "Outfit", sans-serif';
+                ctx.fillStyle = '#001d4a';
+                ctx.fillText('OFF', 860, 1120);  // ajustado
+                
+                ctx.textAlign = 'left';
+                ctx.textBaseline = 'alphabetic';
+                ctx.restore();
+
+                // BARRA INFERIOR (mantida)
+                ctx.shadowBlur = 10;
+                ctx.fillStyle = '#00000040';
+                ctx.globalAlpha = 0.3;
+                ctx.fillRect(0, 1250, w, 100);
+                ctx.globalAlpha = 1;
+                ctx.font = '26px "Outfit", sans-serif';
+                ctx.fillStyle = '#ffffffdd';
+                ctx.shadowBlur = 8;
+                ctx.shadowColor = '#000000';
+                ctx.textAlign = 'center';
+                ctx.fillText('Oferta Válida enquanto durarem os estoques', 540, 1305);
+                
+                ctx.textAlign = 'left';
+                ctx.shadowBlur = 0;
+                ctx.shadowOffsetY = 0;
+                ctx.shadowColor = 'transparent';
+            }
+
+            CanvasRenderingContext2D.prototype.roundRect = function(x, y, w, h, r) {
+                if (w < 2 * r) r = w / 2;
+                if (h < 2 * r) r = h / 2;
+                this.moveTo(x + r, y);
+                this.lineTo(x + w - r, y);
+                this.quadraticCurveTo(x + w, y, x + w, y + r);
+                this.lineTo(x + w, y + h - r);
+                this.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+                this.lineTo(x + r, y + h);
+                this.quadraticCurveTo(x, y + h, x, y + h - r);
+                this.lineTo(x, y + r);
+                this.quadraticCurveTo(x, y, x + r, y);
+                return this;
+            };
+
+            function handleImageUpload(file) {
+                if (!file) return;
+                fileNameSpan.textContent = file.name;
+
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    imagePreview.src = e.target.result;
+                    imagePreviewBox.style.display = 'block';
+
+                    const img = new Image();
+                    img.onload = () => {
+                        uploadedImage = img;
+                        renderPromo();
+                    };
+                    img.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+
+            uploadArea.addEventListener('click', () => fileInput.click());
+            uploadArea.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                uploadArea.style.background = '#e6edf5';
+            });
+            uploadArea.addEventListener('dragleave', () => {
+                uploadArea.style.background = '#f0f4fa';
+            });
+            uploadArea.addEventListener('drop', (e) => {
+                e.preventDefault();
+                uploadArea.style.background = '#f0f4fa';
+                const file = e.dataTransfer.files[0];
+                if (file && file.type.startsWith('image/')) {
+                    fileInput.files = e.dataTransfer.files;
+                    handleImageUpload(file);
+                } else {
+                    alert('Por favor, solte uma imagem válida (png/jpg)');
+                }
+            });
+
+            fileInput.addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if (file) handleImageUpload(file);
+            });
+
+            gerarBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                renderPromo();
+            });
+
+            downloadBtn.addEventListener('click', () => {
+                const link = document.createElement('a');
+                link.download = `promo-${percentualAtual}off-${Date.now()}.png`;
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+            });
+
+            [codigoInput, nomeInput, valorFinalInput].forEach(input => {
+                input.addEventListener('input', () => renderPromo());
+            });
+
+            renderPromo();
+        })();
+    </script>
+</body>
+</html>
