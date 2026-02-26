@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PromoStudio · preço adaptativo à quebra de linha</title>
+    <title>PromoStudio · rodapé em linha única</title>
     <!-- Fontes e ícones -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -386,6 +386,15 @@
                 </div>
             </div>
 
+            <!-- Campo para texto do rodapé (já preenchido automaticamente) -->
+            <div class="input-group">
+                <label><i class="fas fa-message"></i> Texto do rodapé (linha única)</label>
+                <div class="field-with-icon">
+                    <i class="fas fa-pen"></i>
+                    <input type="text" id="rodapeInput" value="Oferta Válida enquanto durarem os estoques" placeholder="Digite o texto do rodapé">
+                </div>
+            </div>
+
             <button class="btn-generate" id="gerarBtn">
                 <i class="fas fa-bolt"></i> GERAR OFERTA
                 <i class="fas fa-arrow-right"></i>
@@ -429,6 +438,7 @@
             const codigoInput = document.getElementById('codigoInput');
             const nomeInput = document.getElementById('nomeInput');
             const valorFinalInput = document.getElementById('valorFinalInput');
+            const rodapeInput = document.getElementById('rodapeInput');
 
             const gerarBtn = document.getElementById('gerarBtn');
             const downloadBtn = document.getElementById('downloadBtn');
@@ -451,6 +461,7 @@
                 const codigo = codigoInput.value.trim() || "---";
                 const nomeCompleto = nomeInput.value.trim() || "Produto";
                 const precoFinalStr = valorFinalInput.value.trim() || "0,00";
+                const textoRodape = rodapeInput.value.trim() || "Oferta Válida enquanto durarem os estoques";
                 
                 percentualAtual = gerarDescontoAleatorio();
                 const precoOriginalStr = calcularPrecoOriginal(precoFinalStr, percentualAtual);
@@ -549,7 +560,7 @@
                 ctx.fillStyle = '#ffffffdd';
                 ctx.fillText(`CÓD. ${codigo}`, 160, 820);
 
-                // NOME DO PRODUTO (com quebra de linha)
+                // NOME DO PRODUTO
                 ctx.font = 'bold 60px "Outfit", sans-serif';
                 ctx.fillStyle = '#ffffff';
                 
@@ -564,21 +575,18 @@
                     }
                 });
 
-                // --- LÓGICA ADAPTATIVA PARA O PREÇO ---
-                // Se houver mais de uma linha (quebra), o preço desce. Caso contrário, fica mais acima.
+                // LÓGICA ADAPTATIVA PARA O PREÇO
                 const quantidadeLinhas = linhas.filter(l => l.trim() !== '').length;
                 
                 let precoOriginalY, riscadoY, precoFinalY, bolinhaY, offY;
                 
                 if (quantidadeLinhas > 1) {
-                    // COM QUEBRA DE LINHA: valores mais abaixo
                     precoOriginalY = 1080;
                     riscadoY = 1065;
                     precoFinalY = 1210;
                     bolinhaY = 1060;
                     offY = 1120;
                 } else {
-                    // SEM QUEBRA DE LINHA: valores mais acima
                     precoOriginalY = 1000;
                     riscadoY = 985;
                     precoFinalY = 1130;
@@ -607,7 +615,7 @@
                 ctx.fillStyle = '#ffffff';
                 ctx.fillText(`R$ ${precoFinalStr}`, 160, precoFinalY);
 
-                // BOLINHA AMARELA (posição adaptativa)
+                // BOLINHA AMARELA
                 ctx.save();
                 ctx.shadowColor = '#ffd966';
                 ctx.shadowBlur = 30;
@@ -639,7 +647,7 @@
                 ctx.textBaseline = 'alphabetic';
                 ctx.restore();
 
-                // BARRA INFERIOR
+                // BARRA INFERIOR COM TEXTO EM LINHA ÚNICA
                 ctx.shadowBlur = 10;
                 ctx.fillStyle = '#00000040';
                 ctx.globalAlpha = 0.3;
@@ -650,7 +658,9 @@
                 ctx.shadowBlur = 8;
                 ctx.shadowColor = '#000000';
                 ctx.textAlign = 'center';
-                ctx.fillText('Oferta Válida enquanto durarem os estoques', 540, 1305);
+                
+                // TEXTO EM UMA ÚNICA LINHA (SEM QUEBRA)
+                ctx.fillText(textoRodape, 540, 1305);
                 
                 ctx.textAlign = 'left';
                 ctx.shadowBlur = 0;
@@ -729,7 +739,7 @@
                 link.click();
             });
 
-            [codigoInput, nomeInput, valorFinalInput].forEach(input => {
+            [codigoInput, nomeInput, valorFinalInput, rodapeInput].forEach(input => {
                 input.addEventListener('input', () => renderPromo());
             });
 
