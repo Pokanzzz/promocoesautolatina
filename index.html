@@ -131,6 +131,50 @@
             box-shadow: 0 12px 22px -10px #a0c0e0;
         }
 
+        .codigo-row {
+            display: flex;
+            gap: 15px;
+            align-items: flex-end;
+        }
+        
+        .codigo-field {
+            flex: 2;
+        }
+        
+        .sem-codigo-field {
+            flex: 1;
+            background: #f0f4fa;
+            border-radius: 38px;
+            padding: 12px 18px;
+            border: 2px solid #e2e8f0;
+            margin-bottom: 6px;
+        }
+        
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            font-weight: 500;
+            color: #1e3b5c;
+        }
+        
+        .checkbox-container input[type="checkbox"] {
+            width: 22px;
+            height: 22px;
+            cursor: pointer;
+            accent-color: #1e3b5c;
+        }
+        
+        .checkbox-container span {
+            font-size: 15px;
+        }
+        
+        .checkbox-container i {
+            color: #1e3b5c;
+            font-size: 18px;
+        }
+
         .upload-area {
             background: #f0f4fa;
             border: 2px dashed #b8cce0;
@@ -449,6 +493,10 @@
             .control-panel {
                 min-width: 300px;
             }
+            .codigo-row {
+                flex-direction: column;
+                gap: 10px;
+            }
         }
     </style>
 </head>
@@ -500,9 +548,18 @@
 
             <div class="input-group">
                 <label><i class="fas fa-qrcode"></i> Código do produto</label>
-                <div class="field-with-icon">
-                    <i class="fas fa-hashtag"></i>
-                    <input type="text" id="codigoInput" placeholder="Ex: 789123" value="AZL789">
+                <div class="codigo-row">
+                    <div class="field-with-icon codigo-field">
+                        <i class="fas fa-hashtag"></i>
+                        <input type="text" id="codigoInput" placeholder="Ex: 789123" value="AZL789">
+                    </div>
+                    <div class="sem-codigo-field">
+                        <label class="checkbox-container">
+                            <input type="checkbox" id="semCodigoCheckbox">
+                            <i class="fas fa-tag"></i>
+                            <span>Publicar sem código<br><small style="font-size: 11px;">(mostra "faça já o seu pedido")</small></span>
+                        </label>
+                    </div>
                 </div>
             </div>
 
@@ -576,6 +633,7 @@
             const zoomValue = document.getElementById('zoomValue');
 
             const codigoInput = document.getElementById('codigoInput');
+            const semCodigoCheckbox = document.getElementById('semCodigoCheckbox');
             const nomeInput = document.getElementById('nomeInput');
             const valorFinalInput = document.getElementById('valorFinalInput');
             const rodapeInput = document.getElementById('rodapeInput');
@@ -637,6 +695,7 @@
 
             const renderPromo = () => {
                 const codigo = codigoInput.value.trim() || "---";
+                const semCodigo = semCodigoCheckbox.checked;
                 const nomeCompleto = nomeInput.value.trim() || "Amortecedor Constellation";
                 const precoFinalStr = valorFinalInput.value.trim() || "0,00";
                 const textoRodape = rodapeInput.value.trim() || "Oferta Válida enquanto durarem os estoques";
@@ -658,34 +717,20 @@
                 ctx.fillRect(0, 0, w, h);
 
                 if (logoImage) {
-                    ctx.save();
-                    ctx.shadowColor = '#000000';
-                    ctx.shadowBlur = 20;
-                    ctx.shadowOffsetY = 4;
-                    
                     const logoWidth = 450;
                     const logoHeight = (logoImage.height / logoImage.width) * logoWidth;
                     const logoX = (w / 2) - (logoWidth / 2);
                     const logoY = 30;
-                    
                     ctx.drawImage(logoImage, logoX, logoY, logoWidth, logoHeight);
-                    ctx.restore();
                 } else {
-                    ctx.save();
-                    ctx.shadowColor = '#000000';
-                    ctx.shadowBlur = 15;
-                    ctx.shadowOffsetY = 3;
                     ctx.font = 'bold 22px "Outfit", sans-serif';
                     ctx.fillStyle = '#ffd966';
                     ctx.textAlign = 'center';
                     ctx.fillText('Carregando logo...', 540, 70);
                     ctx.textAlign = 'left';
-                    ctx.restore();
                 }
 
                 ctx.save();
-                ctx.shadowColor = 'rgba(255, 255, 255, 0.08)';
-                ctx.shadowBlur = 70;
                 ctx.fillStyle = '#ffffff08';
                 ctx.beginPath();
                 ctx.arc(200, 350, 400, 0, Math.PI*2);
@@ -738,17 +783,18 @@
                     ctx.fillRect(130, 180, 820, 580);
                     ctx.font = 'bold 50px "Outfit", sans-serif';
                     ctx.fillStyle = '#b0c8e0';
-                    ctx.shadowBlur = 0;
                     ctx.fillText('🖼️ imagem', 420, 490);
                 }
                 ctx.restore();
 
-                ctx.shadowColor = '#000000';
-                ctx.shadowBlur = 18;
-                ctx.shadowOffsetY = 4;
                 ctx.font = '600 34px "Outfit", monospace';
                 ctx.fillStyle = '#ffffffdd';
-                ctx.fillText(`CÓD. ${codigo}`, 160, 820);
+                
+                if (semCodigo) {
+                    ctx.fillText('faça já o seu pedido', 160, 820);
+                } else {
+                    ctx.fillText(`CÓD. ${codigo}`, 160, 820);
+                }
 
                 ctx.font = 'bold 60px "Outfit", sans-serif';
                 ctx.fillStyle = '#ffffff';
@@ -785,13 +831,11 @@
                 ctx.save();
                 ctx.font = '500 48px "Outfit", sans-serif';
                 ctx.fillStyle = '#dddddd';
-                ctx.globalAlpha = 0.9;
                 ctx.fillText(`de R$ ${precoOriginalStr}`, 160, precoOriginalY);
                 
                 ctx.beginPath();
                 ctx.strokeStyle = '#ff8a8a';
                 ctx.lineWidth = 6;
-                ctx.globalAlpha = 0.9;
                 ctx.moveTo(150, riscadoY);
                 ctx.lineTo(520, riscadoY);
                 ctx.stroke();
@@ -802,11 +846,6 @@
                 ctx.fillText(`R$ ${precoFinalStr}`, 160, precoFinalY);
 
                 ctx.save();
-                ctx.shadowColor = '#ffd966';
-                ctx.shadowBlur = 30;
-                ctx.shadowOffsetX = 0;
-                ctx.shadowOffsetY = 0;
-                
                 const gradientCircle = ctx.createRadialGradient(860, bolinhaY, 20, 860, bolinhaY, 140);
                 gradientCircle.addColorStop(0, '#ffe484');
                 gradientCircle.addColorStop(0.5, '#ffc107');
@@ -818,8 +857,6 @@
 
                 ctx.font = 'bold 70px "Outfit", sans-serif';
                 ctx.fillStyle = '#0f2b50';
-                ctx.shadowBlur = 20;
-                ctx.shadowColor = '#fff9d0';
                 ctx.textAlign = 'center';
                 ctx.textBaseline = 'middle';
                 ctx.fillText(`${percentualAtual}%`, 860, bolinhaY);
@@ -832,22 +869,16 @@
                 ctx.textBaseline = 'alphabetic';
                 ctx.restore();
 
-                ctx.shadowBlur = 10;
                 ctx.fillStyle = '#00000040';
                 ctx.globalAlpha = 0.3;
                 ctx.fillRect(0, 1250, w, 100);
                 ctx.globalAlpha = 1;
                 ctx.font = '26px "Outfit", sans-serif';
                 ctx.fillStyle = '#ffffffdd';
-                ctx.shadowBlur = 8;
-                ctx.shadowColor = '#000000';
                 ctx.textAlign = 'center';
                 ctx.fillText(textoRodape, 540, 1305);
                 
                 ctx.textAlign = 'left';
-                ctx.shadowBlur = 0;
-                ctx.shadowOffsetY = 0;
-                ctx.shadowColor = 'transparent';
             };
 
             CanvasRenderingContext2D.prototype.roundRect = function(x, y, w, h, r) {
@@ -954,8 +985,11 @@
                 link.click();
             });
 
-            [codigoInput, nomeInput, valorFinalInput, rodapeInput].forEach(input => {
+            [codigoInput, semCodigoCheckbox, nomeInput, valorFinalInput, rodapeInput].forEach(input => {
                 input.addEventListener('input', () => renderPromo());
+                if (input.type === 'checkbox') {
+                    input.addEventListener('change', () => renderPromo());
+                }
             });
 
             carregarLogo();
