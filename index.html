@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PromoStudio · espaço para logo · tom escuro</title>
+    <title>PromoStudio · preço adaptativo à quebra de linha</title>
     <!-- Fontes e ícones -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -374,8 +374,7 @@
                 <label><i class="fas fa-tag"></i> Nome do produto (use Enter para quebrar)</label>
                 <div class="field-with-icon">
                     <i class="fas fa-font"></i>
-                    <textarea id="nomeInput" placeholder="Ex: Tênis Ultra Comfort&#10;Edição Especial">Tênis Wave Blue
-Edição Limitada</textarea>
+                    <textarea id="nomeInput" placeholder="Ex: Tênis Ultra Comfort&#10;Edição Especial">Tênis Wave Blue</textarea>
                 </div>
             </div>
 
@@ -461,16 +460,16 @@ Edição Limitada</textarea>
                 canvas.width = w;
                 canvas.height = h;
 
-                // FUNDO AZUL MAIS ESCURO (solicitado)
+                // FUNDO AZUL ESCURO
                 const gradient = ctx.createLinearGradient(0, 0, w*0.7, h*0.8);
-                gradient.addColorStop(0, '#0a1f33');  // escuro
+                gradient.addColorStop(0, '#0a1f33');
                 gradient.addColorStop(0.3, '#122b40');
                 gradient.addColorStop(0.7, '#1a354d');
                 gradient.addColorStop(1, '#0c2238');
                 ctx.fillStyle = gradient;
                 ctx.fillRect(0, 0, w, h);
 
-                // Espaço reservado para LOGO DA EMPRESA (topo central)
+                // ESPAÇO PARA LOGO
                 ctx.save();
                 ctx.shadowColor = '#000000';
                 ctx.shadowBlur = 15;
@@ -478,14 +477,14 @@ Edição Limitada</textarea>
                 ctx.font = 'bold 36px "Outfit", sans-serif';
                 ctx.fillStyle = '#ffffffcc';
                 ctx.textAlign = 'center';
-                ctx.fillText('____________________', 540, 70);  // linha simulando espaço para logo
+                ctx.fillText('____________________', 540, 70);
                 ctx.font = 'bold 22px "Outfit", sans-serif';
                 ctx.fillStyle = '#ffd966';
                 ctx.fillText('ESPAÇO PARA LOGO', 540, 110);
                 ctx.textAlign = 'left';
                 ctx.restore();
 
-                // Elementos decorativos suaves (mais sutis no fundo escuro)
+                // Elementos decorativos
                 ctx.save();
                 ctx.shadowColor = 'rgba(255, 255, 255, 0.08)';
                 ctx.shadowBlur = 70;
@@ -499,14 +498,14 @@ Edição Limitada</textarea>
                 ctx.fill();
                 ctx.restore();
 
-                // Moldura da imagem (mais escura para combinar)
+                // Moldura da imagem
                 ctx.save();
                 ctx.shadowColor = '#000000';
                 ctx.shadowBlur = 30;
                 ctx.shadowOffsetY = 8;
                 ctx.fillStyle = '#1e3a5a';
                 ctx.beginPath();
-                ctx.roundRect(130, 180, 820, 580, 48);  // movido 40px para baixo (140 -> 180)
+                ctx.roundRect(130, 180, 820, 580, 48);
                 ctx.fill();
                 ctx.restore();
 
@@ -542,21 +541,21 @@ Edição Limitada</textarea>
                 }
                 ctx.restore();
 
-                // CÓDIGO (agora mais abaixo devido ao espaço da logo)
+                // CÓDIGO
                 ctx.shadowColor = '#000000';
                 ctx.shadowBlur = 18;
                 ctx.shadowOffsetY = 4;
                 ctx.font = '600 34px "Outfit", monospace';
                 ctx.fillStyle = '#ffffffdd';
-                ctx.fillText(`CÓD. ${codigo}`, 160, 820);  // ajustado (era 780)
+                ctx.fillText(`CÓD. ${codigo}`, 160, 820);
 
-                // NOME DO PRODUTO
+                // NOME DO PRODUTO (com quebra de linha)
                 ctx.font = 'bold 60px "Outfit", sans-serif';
                 ctx.fillStyle = '#ffffff';
                 
                 const linhas = nomeCompleto.split('\n');
                 const linhaAltura = 70;
-                let yPos = 920;  // ajustado (era 880)
+                let yPos = 920;
                 
                 linhas.forEach((linha) => {
                     if (linha.trim() !== '') {
@@ -565,40 +564,62 @@ Edição Limitada</textarea>
                     }
                 });
 
+                // --- LÓGICA ADAPTATIVA PARA O PREÇO ---
+                // Se houver mais de uma linha (quebra), o preço desce. Caso contrário, fica mais acima.
+                const quantidadeLinhas = linhas.filter(l => l.trim() !== '').length;
+                
+                let precoOriginalY, riscadoY, precoFinalY, bolinhaY, offY;
+                
+                if (quantidadeLinhas > 1) {
+                    // COM QUEBRA DE LINHA: valores mais abaixo
+                    precoOriginalY = 1080;
+                    riscadoY = 1065;
+                    precoFinalY = 1210;
+                    bolinhaY = 1060;
+                    offY = 1120;
+                } else {
+                    // SEM QUEBRA DE LINHA: valores mais acima
+                    precoOriginalY = 1000;
+                    riscadoY = 985;
+                    precoFinalY = 1130;
+                    bolinhaY = 980;
+                    offY = 1040;
+                }
+
                 // PREÇO ORIGINAL
                 ctx.save();
                 ctx.font = '500 48px "Outfit", sans-serif';
                 ctx.fillStyle = '#dddddd';
                 ctx.globalAlpha = 0.9;
-                ctx.fillText(`de R$ ${precoOriginalStr}`, 160, 1080);  // ajustado (era 1040)
+                ctx.fillText(`de R$ ${precoOriginalStr}`, 160, precoOriginalY);
                 
                 ctx.beginPath();
                 ctx.strokeStyle = '#ff8a8a';
                 ctx.lineWidth = 6;
                 ctx.globalAlpha = 0.9;
-                ctx.moveTo(150, 1065);  // ajustado
-                ctx.lineTo(520, 1065);
+                ctx.moveTo(150, riscadoY);
+                ctx.lineTo(520, riscadoY);
                 ctx.stroke();
                 ctx.restore();
 
                 // PREÇO FINAL
                 ctx.font = '800 100px "Outfit", sans-serif';
                 ctx.fillStyle = '#ffffff';
-                ctx.fillText(`R$ ${precoFinalStr}`, 160, 1210);  // ajustado (era 1170)
+                ctx.fillText(`R$ ${precoFinalStr}`, 160, precoFinalY);
 
-                // BOLINHA AMARELA (posição ajustada)
+                // BOLINHA AMARELA (posição adaptativa)
                 ctx.save();
                 ctx.shadowColor = '#ffd966';
                 ctx.shadowBlur = 30;
                 ctx.shadowOffsetX = 0;
                 ctx.shadowOffsetY = 0;
                 
-                const gradientCircle = ctx.createRadialGradient(860, 1060, 20, 860, 1060, 140);  // y 1060 (era 1020)
+                const gradientCircle = ctx.createRadialGradient(860, bolinhaY, 20, 860, bolinhaY, 140);
                 gradientCircle.addColorStop(0, '#ffe484');
                 gradientCircle.addColorStop(0.5, '#ffc107');
                 gradientCircle.addColorStop(1, '#f5a623');
                 ctx.beginPath();
-                ctx.arc(860, 1060, 115, 0, Math.PI*2);
+                ctx.arc(860, bolinhaY, 115, 0, Math.PI*2);
                 ctx.fillStyle = gradientCircle;
                 ctx.fill();
 
@@ -608,17 +629,17 @@ Edição Limitada</textarea>
                 ctx.shadowColor = '#fff9d0';
                 ctx.textAlign = 'center';
                 ctx.textBaseline = 'middle';
-                ctx.fillText(`${percentualAtual}%`, 860, 1060);
+                ctx.fillText(`${percentualAtual}%`, 860, bolinhaY);
                 
                 ctx.font = 'bold 36px "Outfit", sans-serif';
                 ctx.fillStyle = '#001d4a';
-                ctx.fillText('OFF', 860, 1120);  // ajustado
+                ctx.fillText('OFF', 860, offY);
                 
                 ctx.textAlign = 'left';
                 ctx.textBaseline = 'alphabetic';
                 ctx.restore();
 
-                // BARRA INFERIOR (mantida)
+                // BARRA INFERIOR
                 ctx.shadowBlur = 10;
                 ctx.fillStyle = '#00000040';
                 ctx.globalAlpha = 0.3;
