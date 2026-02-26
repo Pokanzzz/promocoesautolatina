@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PromoAutolatina · com controle de zoom</title>
-    <!-- Fontes e ícones -->
+    <title>PromoAutolatina · Studio Visual</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -201,7 +200,6 @@
             background: #eef2f6;
         }
 
-        /* Controles de zoom */
         .zoom-control {
             background: #ffffff;
             border-radius: 50px;
@@ -423,11 +421,25 @@
             font-size: 24px;
         }
 
-        footer {
-            font-size: 13px;
-            color: #7f8fa4;
-            margin-top: 18px;
-            text-align: right;
+        .site-footer {
+            margin-top: 28px;
+            text-align: center;
+            font-size: 14px;
+            color: #5f748b;
+            border-top: 1px solid #e0e8f0;
+            padding-top: 20px;
+            width: 100%;
+        }
+
+        .site-footer i {
+            margin-right: 6px;
+            color: #1e3b5c;
+        }
+
+        .footer-contact {
+            font-weight: 600;
+            color: #1e3b5c;
+            margin-left: 20px;
         }
 
         @media (max-width: 950px) {
@@ -464,7 +476,6 @@
                 </div>
             </div>
 
-            <!-- Controles de Zoom e Posição -->
             <div class="zoom-control" id="zoomControls" style="display: none;">
                 <div class="zoom-header">
                     <i class="fas fa-search-plus"></i>
@@ -499,7 +510,7 @@
                 <label><i class="fas fa-tag"></i> Nome do produto (use Enter para quebrar)</label>
                 <div class="field-with-icon">
                     <i class="fas fa-font"></i>
-                    <textarea id="nomeInput" placeholder="Ex: Tênis Ultra Comfort&#10;Edição Especial">Tênis Wave Blue</textarea>
+                    <textarea id="nomeInput" placeholder="Ex: Amortecedor Constellation&#10;Edição Especial">Embreagem Viscosa</textarea>
                 </div>
             </div>
 
@@ -542,9 +553,11 @@
                     <i class="fas fa-download"></i> BAIXAR ARTE
                 </div>
             </div>
-            <footer>
-                <i class="fas fa-magic"></i> qualidade full HD · pronto para whatsapp
-            </footer>
+        </div>
+        
+        <div class="site-footer">
+            <i class="fas fa-building"></i> SITE DE USO INTERNO AUTOLATINA 
+            <span class="footer-contact"><i class="fas fa-phone-alt"></i> CONTATO: (45) 99949-2711</span>
         </div>
     </div>
 
@@ -570,7 +583,6 @@
             const gerarBtn = document.getElementById('gerarBtn');
             const downloadBtn = document.getElementById('downloadBtn');
 
-            // Controles de posição
             const moveUp = document.getElementById('moveUp');
             const moveDown = document.getElementById('moveDown');
             const moveLeft = document.getElementById('moveLeft');
@@ -580,54 +592,52 @@
             let uploadedImage = null;
             let logoImage = null;
             
-            // Variáveis para controle de zoom e posição
             let zoomLevel = 1.0;
             let offsetX = 0;
             let offsetY = 0;
-            const MOVE_STEP = 15; // pixels por movimento
+            const MOVE_STEP = 15;
 
-            // Carrega a logo automaticamente do GitHub
-            function carregarLogo() {
+            const carregarLogo = () => {
                 const linkDaLogo = 'https://raw.githubusercontent.com/Pokanzzz/promocoesautolatina/main/Logo_extensa_branca-removebg-preview.png';
                 const img = new Image();
                 img.crossOrigin = 'anonymous';
-                img.onload = function() {
+                img.onload = () => {
                     logoImage = img;
                     renderPromo();
                 };
-                img.onerror = function() {
+                img.onerror = () => {
                     console.log('Erro ao carregar a logo. Verifique o link.');
                 };
                 img.src = linkDaLogo;
-            }
+            };
 
-            function gerarDescontoAleatorio() {
+            const gerarDescontoAleatorio = () => {
                 return Math.floor(Math.random() * (25 - 15 + 1)) + 15;
-            }
+            };
 
-            function calcularPrecoOriginal(precoFinal, percentualDesconto) {
+            const calcularPrecoOriginal = (precoFinal, percentualDesconto) => {
                 let finalNumerico = parseFloat(precoFinal.replace(/[R$\s]/g, '').replace(',', '.'));
                 if (isNaN(finalNumerico) || finalNumerico <= 0) return '0,00';
                 let original = finalNumerico / (1 - percentualDesconto / 100);
                 return original.toFixed(2).replace('.', ',');
-            }
+            };
 
-            function updateZoomDisplay() {
+            const updateZoomDisplay = () => {
                 zoomValue.textContent = Math.round(zoomLevel * 100) + '%';
-            }
+            };
 
-            function resetZoomAndPosition() {
+            const resetZoomAndPosition = () => {
                 zoomLevel = 1.0;
                 offsetX = 0;
                 offsetY = 0;
                 zoomSlider.value = zoomLevel;
                 updateZoomDisplay();
                 renderPromo();
-            }
+            };
 
-            function renderPromo() {
+            const renderPromo = () => {
                 const codigo = codigoInput.value.trim() || "---";
-                const nomeCompleto = nomeInput.value.trim() || "Produto";
+                const nomeCompleto = nomeInput.value.trim() || "Amortecedor Constellation";
                 const precoFinalStr = valorFinalInput.value.trim() || "0,00";
                 const textoRodape = rodapeInput.value.trim() || "Oferta Válida enquanto durarem os estoques";
                 
@@ -639,7 +649,6 @@
                 canvas.width = w;
                 canvas.height = h;
 
-                // FUNDO AZUL ESCURO
                 const gradient = ctx.createLinearGradient(0, 0, w*0.7, h*0.8);
                 gradient.addColorStop(0, '#0a1f33');
                 gradient.addColorStop(0.3, '#122b40');
@@ -648,7 +657,6 @@
                 ctx.fillStyle = gradient;
                 ctx.fillRect(0, 0, w, h);
 
-                // ===== LOGO DA EMPRESA =====
                 if (logoImage) {
                     ctx.save();
                     ctx.shadowColor = '#000000';
@@ -675,7 +683,6 @@
                     ctx.restore();
                 }
 
-                // Elementos decorativos
                 ctx.save();
                 ctx.shadowColor = 'rgba(255, 255, 255, 0.08)';
                 ctx.shadowBlur = 70;
@@ -689,7 +696,6 @@
                 ctx.fill();
                 ctx.restore();
 
-                // Moldura da imagem
                 ctx.save();
                 ctx.shadowColor = '#000000';
                 ctx.shadowBlur = 30;
@@ -716,12 +722,10 @@
                     const rectX = 130;
                     const rectY = 180;
 
-                    // Aplica zoom e offset
                     const effectiveZoom = zoomLevel;
                     const drawW = imgW * effectiveZoom;
                     const drawH = imgH * effectiveZoom;
                     
-                    // Calcula posição base (centralizada) e aplica offset
                     const baseX = rectX + (rectW - drawW) / 2;
                     const baseY = rectY + (rectH - drawH) / 2;
                     
@@ -739,7 +743,6 @@
                 }
                 ctx.restore();
 
-                // CÓDIGO
                 ctx.shadowColor = '#000000';
                 ctx.shadowBlur = 18;
                 ctx.shadowOffsetY = 4;
@@ -747,7 +750,6 @@
                 ctx.fillStyle = '#ffffffdd';
                 ctx.fillText(`CÓD. ${codigo}`, 160, 820);
 
-                // NOME DO PRODUTO
                 ctx.font = 'bold 60px "Outfit", sans-serif';
                 ctx.fillStyle = '#ffffff';
                 
@@ -762,7 +764,6 @@
                     }
                 });
 
-                // LÓGICA ADAPTATIVA PARA O PREÇO
                 const quantidadeLinhas = linhas.filter(l => l.trim() !== '').length;
                 
                 let precoOriginalY, riscadoY, precoFinalY, bolinhaY, offY;
@@ -781,7 +782,6 @@
                     offY = 1040;
                 }
 
-                // PREÇO ORIGINAL
                 ctx.save();
                 ctx.font = '500 48px "Outfit", sans-serif';
                 ctx.fillStyle = '#dddddd';
@@ -797,12 +797,10 @@
                 ctx.stroke();
                 ctx.restore();
 
-                // PREÇO FINAL
                 ctx.font = '800 100px "Outfit", sans-serif';
                 ctx.fillStyle = '#ffffff';
                 ctx.fillText(`R$ ${precoFinalStr}`, 160, precoFinalY);
 
-                // BOLINHA AMARELA
                 ctx.save();
                 ctx.shadowColor = '#ffd966';
                 ctx.shadowBlur = 30;
@@ -834,7 +832,6 @@
                 ctx.textBaseline = 'alphabetic';
                 ctx.restore();
 
-                // BARRA INFERIOR
                 ctx.shadowBlur = 10;
                 ctx.fillStyle = '#00000040';
                 ctx.globalAlpha = 0.3;
@@ -851,7 +848,7 @@
                 ctx.shadowBlur = 0;
                 ctx.shadowOffsetY = 0;
                 ctx.shadowColor = 'transparent';
-            }
+            };
 
             CanvasRenderingContext2D.prototype.roundRect = function(x, y, w, h, r) {
                 if (w < 2 * r) r = w / 2;
@@ -868,7 +865,7 @@
                 return this;
             };
 
-            function handleImageUpload(file) {
+            const handleImageUpload = (file) => {
                 if (!file) return;
                 fileNameSpan.textContent = file.name;
 
@@ -877,10 +874,8 @@
                     imagePreview.src = e.target.result;
                     imagePreviewBox.style.display = 'block';
                     
-                    // Mostra os controles de zoom
                     zoomControls.style.display = 'block';
                     
-                    // Reseta zoom e posição para nova imagem
                     resetZoomAndPosition();
 
                     const img = new Image();
@@ -891,9 +886,8 @@
                     img.src = e.target.result;
                 };
                 reader.readAsDataURL(file);
-            }
+            };
 
-            // Event listeners para upload
             uploadArea.addEventListener('click', () => fileInput.click());
             uploadArea.addEventListener('dragover', (e) => {
                 e.preventDefault();
@@ -919,14 +913,12 @@
                 if (file) handleImageUpload(file);
             });
 
-            // Event listeners para zoom
             zoomSlider.addEventListener('input', (e) => {
                 zoomLevel = parseFloat(e.target.value);
                 updateZoomDisplay();
                 renderPromo();
             });
 
-            // Controles de posição
             moveUp.addEventListener('click', () => {
                 offsetY -= MOVE_STEP;
                 renderPromo();
@@ -949,13 +941,11 @@
 
             resetPosition.addEventListener('click', resetZoomAndPosition);
 
-            // Botão gerar
             gerarBtn.addEventListener('click', (e) => {
                 e.preventDefault();
                 renderPromo();
             });
 
-            // Download
             downloadBtn.addEventListener('click', () => {
                 const percentualAtual = gerarDescontoAleatorio();
                 const link = document.createElement('a');
@@ -964,15 +954,11 @@
                 link.click();
             });
 
-            // Inputs automáticos
             [codigoInput, nomeInput, valorFinalInput, rodapeInput].forEach(input => {
                 input.addEventListener('input', () => renderPromo());
             });
 
-            // Inicia o carregamento da logo
             carregarLogo();
-            
-            // Render inicial
             renderPromo();
         })();
     </script>
