@@ -498,7 +498,7 @@
                 ctx.fillStyle = gradient;
                 ctx.fillRect(0, 0, w, h);
 
-                // ===== LOGO DA EMPRESA =====
+                // ===== LOGO DA EMPRESA (AUMENTADA) =====
                 if (logoImage) {
                     ctx.save();
                     // Sombra suave para a logo
@@ -506,8 +506,8 @@
                     ctx.shadowBlur = 20;
                     ctx.shadowOffsetY = 4;
                     
-                    // Tamanho da logo (ajuste conforme necessário)
-                    const logoWidth = 350; // Largura desejada
+                    // Tamanho da logo - AUMENTADO para 450 (antes 350)
+                    const logoWidth = 450; // ⬅️ VALOR AUMENTADO
                     const logoHeight = (logoImage.height / logoImage.width) * logoWidth; // Mantém proporção
                     const logoX = (w / 2) - (logoWidth / 2); // Centraliza
                     const logoY = 30; // Distância do topo
