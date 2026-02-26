@@ -670,7 +670,7 @@
             };
 
             const gerarDescontoAleatorio = () => {
-                return Math.floor(Math.random() * (25 - 15 + 1)) + 15;
+                return Math.floor(Math.random() * (35 - 25 + 1)) + 25;
             };
 
             const calcularPrecoOriginal = (precoFinal, percentualDesconto) => {
@@ -846,6 +846,12 @@
                 ctx.fillText(`R$ ${precoFinalStr}`, 160, precoFinalY);
 
                 ctx.save();
+                
+                ctx.shadowColor = '#ffaa00';
+                ctx.shadowBlur = 40;
+                ctx.shadowOffsetX = 0;
+                ctx.shadowOffsetY = 0;
+                
                 const gradientCircle = ctx.createRadialGradient(860, bolinhaY, 20, 860, bolinhaY, 140);
                 gradientCircle.addColorStop(0, '#ffe484');
                 gradientCircle.addColorStop(0.5, '#ffc107');
@@ -855,12 +861,16 @@
                 ctx.fillStyle = gradientCircle;
                 ctx.fill();
 
+                ctx.shadowColor = '#fff9d0';
+                ctx.shadowBlur = 30;
+                
                 ctx.font = 'bold 70px "Outfit", sans-serif';
                 ctx.fillStyle = '#0f2b50';
                 ctx.textAlign = 'center';
                 ctx.textBaseline = 'middle';
                 ctx.fillText(`${percentualAtual}%`, 860, bolinhaY);
                 
+                ctx.shadowBlur = 20;
                 ctx.font = 'bold 36px "Outfit", sans-serif';
                 ctx.fillStyle = '#001d4a';
                 ctx.fillText('OFF', 860, offY);
