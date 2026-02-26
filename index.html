@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PromoAutolatina · com logo automática</title>
+    <title>PromoAutolatina · com controle de zoom</title>
     <!-- Fontes e ícones -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -201,6 +201,108 @@
             background: #eef2f6;
         }
 
+        /* Controles de zoom */
+        .zoom-control {
+            background: #ffffff;
+            border-radius: 50px;
+            padding: 15px 20px;
+            margin: 20px 0 10px;
+            box-shadow: 0 8px 16px -8px rgba(0,0,0,0.1);
+            border: 1px solid #e0e8f0;
+        }
+
+        .zoom-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+            color: #1e3b5c;
+            font-weight: 600;
+        }
+
+        .zoom-header i {
+            font-size: 24px;
+            color: #3a5f7a;
+        }
+
+        .slider-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .slider-container i {
+            font-size: 20px;
+            color: #7f8fa4;
+        }
+
+        .slider-container i.fa-search-plus {
+            color: #1e3b5c;
+        }
+
+        input[type=range] {
+            flex: 1;
+            height: 8px;
+            -webkit-appearance: none;
+            background: linear-gradient(90deg, #6c8eb0, #1e3b5c);
+            border-radius: 10px;
+            outline: none;
+        }
+
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 24px;
+            height: 24px;
+            background: white;
+            border-radius: 50%;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            border: 2px solid #1e3b5c;
+            cursor: pointer;
+        }
+
+        .zoom-value {
+            background: #1e3b5c;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 16px;
+            min-width: 70px;
+            text-align: center;
+        }
+
+        .position-controls {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            justify-content: center;
+        }
+
+        .pos-btn {
+            background: white;
+            border: 1px solid #d0dcec;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: 0.15s;
+            color: #1e3b5c;
+            font-size: 18px;
+        }
+
+        .pos-btn:hover {
+            background: #1e3b5c;
+            color: white;
+            border-color: #1e3b5c;
+        }
+
+        .pos-btn:active {
+            transform: scale(0.95);
+        }
+
         .btn-generate {
             background: #1e3b5c;
             border: none;
@@ -362,6 +464,29 @@
                 </div>
             </div>
 
+            <!-- Controles de Zoom e Posição -->
+            <div class="zoom-control" id="zoomControls" style="display: none;">
+                <div class="zoom-header">
+                    <i class="fas fa-search-plus"></i>
+                    <span>Lupa - Ajuste fino da imagem</span>
+                </div>
+                
+                <div class="slider-container">
+                    <i class="fas fa-search-minus"></i>
+                    <input type="range" id="zoomSlider" min="0.5" max="3" step="0.05" value="1">
+                    <i class="fas fa-search-plus"></i>
+                    <span class="zoom-value" id="zoomValue">100%</span>
+                </div>
+
+                <div class="position-controls">
+                    <div class="pos-btn" id="moveUp" title="Mover para cima"><i class="fas fa-arrow-up"></i></div>
+                    <div class="pos-btn" id="moveLeft" title="Mover para esquerda"><i class="fas fa-arrow-left"></i></div>
+                    <div class="pos-btn" id="moveRight" title="Mover para direita"><i class="fas fa-arrow-right"></i></div>
+                    <div class="pos-btn" id="moveDown" title="Mover para baixo"><i class="fas fa-arrow-down"></i></div>
+                    <div class="pos-btn" id="resetPosition" title="Resetar zoom e posição"><i class="fas fa-undo-alt"></i></div>
+                </div>
+            </div>
+
             <div class="input-group">
                 <label><i class="fas fa-qrcode"></i> Código do produto</label>
                 <div class="field-with-icon">
@@ -386,7 +511,6 @@
                 </div>
             </div>
 
-            <!-- Campo para texto do rodapé -->
             <div class="input-group">
                 <label><i class="fas fa-message"></i> Texto do rodapé (linha única)</label>
                 <div class="field-with-icon">
@@ -401,7 +525,7 @@
             </button>
 
             <div style="margin-top: 20px; font-size: 14px; color: #5f748b; padding-left: 12px;">
-                <i class="fas fa-ruler-combined"></i> Você digita o preço final · geramos um original maior
+                <i class="fas fa-ruler-combined"></i> Use a lupa para ajustar o zoom da imagem
             </div>
         </div>
 
@@ -434,6 +558,9 @@
             const fileNameSpan = document.getElementById('fileNameDisplay');
             const imagePreviewBox = document.getElementById('imagePreviewBox');
             const imagePreview = document.getElementById('imagePreview');
+            const zoomControls = document.getElementById('zoomControls');
+            const zoomSlider = document.getElementById('zoomSlider');
+            const zoomValue = document.getElementById('zoomValue');
 
             const codigoInput = document.getElementById('codigoInput');
             const nomeInput = document.getElementById('nomeInput');
@@ -443,20 +570,30 @@
             const gerarBtn = document.getElementById('gerarBtn');
             const downloadBtn = document.getElementById('downloadBtn');
 
+            // Controles de posição
+            const moveUp = document.getElementById('moveUp');
+            const moveDown = document.getElementById('moveDown');
+            const moveLeft = document.getElementById('moveLeft');
+            const moveRight = document.getElementById('moveRight');
+            const resetPosition = document.getElementById('resetPosition');
+
             let uploadedImage = null;
-            let percentualAtual = 20;
-            
-            // Variável para a logo
             let logoImage = null;
+            
+            // Variáveis para controle de zoom e posição
+            let zoomLevel = 1.0;
+            let offsetX = 0;
+            let offsetY = 0;
+            const MOVE_STEP = 15; // pixels por movimento
 
             // Carrega a logo automaticamente do GitHub
             function carregarLogo() {
                 const linkDaLogo = 'https://raw.githubusercontent.com/Pokanzzz/promocoesautolatina/main/Logo_extensa_branca-removebg-preview.png';
                 const img = new Image();
-                img.crossOrigin = 'anonymous'; // Importante para imagens de outro domínio
+                img.crossOrigin = 'anonymous';
                 img.onload = function() {
                     logoImage = img;
-                    renderPromo(); // Renderiza com a logo carregada
+                    renderPromo();
                 };
                 img.onerror = function() {
                     console.log('Erro ao carregar a logo. Verifique o link.');
@@ -475,13 +612,26 @@
                 return original.toFixed(2).replace('.', ',');
             }
 
+            function updateZoomDisplay() {
+                zoomValue.textContent = Math.round(zoomLevel * 100) + '%';
+            }
+
+            function resetZoomAndPosition() {
+                zoomLevel = 1.0;
+                offsetX = 0;
+                offsetY = 0;
+                zoomSlider.value = zoomLevel;
+                updateZoomDisplay();
+                renderPromo();
+            }
+
             function renderPromo() {
                 const codigo = codigoInput.value.trim() || "---";
                 const nomeCompleto = nomeInput.value.trim() || "Produto";
                 const precoFinalStr = valorFinalInput.value.trim() || "0,00";
                 const textoRodape = rodapeInput.value.trim() || "Oferta Válida enquanto durarem os estoques";
                 
-                percentualAtual = gerarDescontoAleatorio();
+                const percentualAtual = gerarDescontoAleatorio();
                 const precoOriginalStr = calcularPrecoOriginal(precoFinalStr, percentualAtual);
 
                 const w = 1080;
@@ -498,24 +648,21 @@
                 ctx.fillStyle = gradient;
                 ctx.fillRect(0, 0, w, h);
 
-                // ===== LOGO DA EMPRESA (AUMENTADA) =====
+                // ===== LOGO DA EMPRESA =====
                 if (logoImage) {
                     ctx.save();
-                    // Sombra suave para a logo
                     ctx.shadowColor = '#000000';
                     ctx.shadowBlur = 20;
                     ctx.shadowOffsetY = 4;
                     
-                    // Tamanho da logo - AUMENTADO para 450 (antes 350)
-                    const logoWidth = 450; // ⬅️ VALOR AUMENTADO
-                    const logoHeight = (logoImage.height / logoImage.width) * logoWidth; // Mantém proporção
-                    const logoX = (w / 2) - (logoWidth / 2); // Centraliza
-                    const logoY = 30; // Distância do topo
+                    const logoWidth = 450;
+                    const logoHeight = (logoImage.height / logoImage.width) * logoWidth;
+                    const logoX = (w / 2) - (logoWidth / 2);
+                    const logoY = 30;
                     
                     ctx.drawImage(logoImage, logoX, logoY, logoWidth, logoHeight);
                     ctx.restore();
                 } else {
-                    // Placeholder enquanto a logo não carrega
                     ctx.save();
                     ctx.shadowColor = '#000000';
                     ctx.shadowBlur = 15;
@@ -569,11 +716,18 @@
                     const rectX = 130;
                     const rectY = 180;
 
-                    const scale = Math.max(rectW / imgW, rectH / imgH);
-                    const drawW = imgW * scale;
-                    const drawH = imgH * scale;
-                    const drawX = rectX + (rectW - drawW) / 2;
-                    const drawY = rectY + (rectH - drawH) / 2;
+                    // Aplica zoom e offset
+                    const effectiveZoom = zoomLevel;
+                    const drawW = imgW * effectiveZoom;
+                    const drawH = imgH * effectiveZoom;
+                    
+                    // Calcula posição base (centralizada) e aplica offset
+                    const baseX = rectX + (rectW - drawW) / 2;
+                    const baseY = rectY + (rectH - drawH) / 2;
+                    
+                    const drawX = baseX + offsetX;
+                    const drawY = baseY + offsetY;
+                    
                     ctx.drawImage(uploadedImage, drawX, drawY, drawW, drawH);
                 } else {
                     ctx.fillStyle = '#1e3a5a';
@@ -722,6 +876,12 @@
                 reader.onload = (e) => {
                     imagePreview.src = e.target.result;
                     imagePreviewBox.style.display = 'block';
+                    
+                    // Mostra os controles de zoom
+                    zoomControls.style.display = 'block';
+                    
+                    // Reseta zoom e posição para nova imagem
+                    resetZoomAndPosition();
 
                     const img = new Image();
                     img.onload = () => {
@@ -733,6 +893,7 @@
                 reader.readAsDataURL(file);
             }
 
+            // Event listeners para upload
             uploadArea.addEventListener('click', () => fileInput.click());
             uploadArea.addEventListener('dragover', (e) => {
                 e.preventDefault();
@@ -758,18 +919,52 @@
                 if (file) handleImageUpload(file);
             });
 
+            // Event listeners para zoom
+            zoomSlider.addEventListener('input', (e) => {
+                zoomLevel = parseFloat(e.target.value);
+                updateZoomDisplay();
+                renderPromo();
+            });
+
+            // Controles de posição
+            moveUp.addEventListener('click', () => {
+                offsetY -= MOVE_STEP;
+                renderPromo();
+            });
+
+            moveDown.addEventListener('click', () => {
+                offsetY += MOVE_STEP;
+                renderPromo();
+            });
+
+            moveLeft.addEventListener('click', () => {
+                offsetX -= MOVE_STEP;
+                renderPromo();
+            });
+
+            moveRight.addEventListener('click', () => {
+                offsetX += MOVE_STEP;
+                renderPromo();
+            });
+
+            resetPosition.addEventListener('click', resetZoomAndPosition);
+
+            // Botão gerar
             gerarBtn.addEventListener('click', (e) => {
                 e.preventDefault();
                 renderPromo();
             });
 
+            // Download
             downloadBtn.addEventListener('click', () => {
+                const percentualAtual = gerarDescontoAleatorio();
                 const link = document.createElement('a');
                 link.download = `promo-${percentualAtual}off-${Date.now()}.png`;
                 link.href = canvas.toDataURL('image/png');
                 link.click();
             });
 
+            // Inputs automáticos
             [codigoInput, nomeInput, valorFinalInput, rodapeInput].forEach(input => {
                 input.addEventListener('input', () => renderPromo());
             });
